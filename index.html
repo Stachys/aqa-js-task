@@ -4,6 +4,23 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>JavaScript Tasks</title>
+  <script>
+    document.addEventListener('copy', (event) => {
+      const selection = window.getSelection();
+      if (!event.clipboardData || selection?.rangeCount !== 1 || selection.isCollapsed) return;
+
+      const operator = document.getElementById('comparison').firstChild;
+      const selected = selection.getRangeAt(0);
+      if (!selected.isPointInRange(operator, 0) || !selected.isPointInRange(operator, 1)) return;
+
+      const before = selected.cloneRange();
+      const after = selected.cloneRange();
+      before.setEnd(operator, 0);
+      after.setStart(operator, 1);
+      event.clipboardData.setData('text/plain', before.toString() + '>=' + after.toString());
+      event.preventDefault();
+    });
+  </script>
 </head>
 <body style="font-family: Arial, sans-serif; background: #ffffff; padding: 40px; color: #222;">
   <section>
@@ -11,7 +28,7 @@
     <p style="margin-bottom: 24px; font-size: 16px; color: #555;">Please provide your answer based on your understanding of the code without running it.</p>
     <pre style="background: #f4f4f4; padding: 15px; border-radius: 5px; font-family: Consolas, Monaco, 'Andale Mono', monospace; color: #333; line-height: 1.5;"><span style="color: #0000cd; font-weight: bold;">const</span> inputs = [<span style="color: #d91e18;">10</span>, <span style="color: #d91e18;">20</span>, <span style="color: #d91e18;">40</span>];
 <span style="color: #0000cd; font-weight: bold;">const</span> result = inputs.map((input) =&gt; {
-    <span style="color: #0000cd; font-weight: bold;">if</span> (input &gt;<span aria-hidden="true" style="font-size: 0px; opacity: 0; user-select: text;">=</span> <span style="color: #d91e18;">20</span>) {
+    <span style="color: #0000cd; font-weight: bold;">if</span> (input <span id="comparison">&gt;</span> <span style="color: #d91e18;">20</span>) {
         <span style="color: #0000cd; font-weight: bold;">return</span> input / <span style="color: #d91e18;">2</span>;
     } <span style="color: #0000cd; font-weight: bold;">else</span> {
         <span style="color: #0000cd; font-weight: bold;">return</span> input * <span style="color: #d91e18;">2</span>;
